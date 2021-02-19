@@ -34,6 +34,6 @@ target_link_libraries("${PROJECT_NAME}" "stdc++fs")
 target_link_libraries("${PROJECT_NAME}" "${Boost_LIBRARIES}")
 target_link_libraries("${PROJECT_NAME}" "ZLIB::ZLIB")
 
-target_include_directories("${PROJECT_NAME}" PRIVATE "include" PRIVATE "lib/tqdm.cpp/include" PRIVATE "lib/cpp-stopwatch")
+target_include_directories("${PROJECT_NAME}" PRIVATE "include" PRIVATE "lib/cpp-stopwatch")
 install(TARGETS "${PROJECT_NAME}" DESTINATION bin)
 install(FILES "src/dna.cpp" DESTINATION src)

@@ -1,10 +1,10 @@
-# DNA's Not ASCII
+# 🧬 DNA's Not ASCII
 
 Stats on the Human genome.
 
 ## Prerequisite
 
-Please install [CMake](https://cmake.org/install/):
+Please install [CMake][cmake]:
 
 ```bash
 sudo apt-get install -y build-essential libssl-dev
@@ -18,7 +18,7 @@ make
 sudo make install
 ```
 
-Then, install [Boost](https://www.boost.org/):
+Then, install [Boost][boost]:
 
 ```bash
 curl -fsSOL https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.bz2
@@ -31,7 +31,7 @@ cd /opt/boost
 sudo ./b2 install
 ```
 
-Install [zlib](http://zlib.net/):
+Install [zlib][zlib]:
 
 ```bash
 cd /opt
@@ -44,8 +44,54 @@ make test
 sudo make install
 ```
 
-Compile the project:
+## Getting Started
+
+To compile the project, use the following command:
 
 ```bash
 make
 ```
+
+If you want to compile it under a specific build type, you can use one of the following:
+
+```bash
+make compile CMAKE_BUILT_TYPE=Debug
+make compile CMAKE_BUILT_TYPE=Release
+```
+
+The defaults build type is `Release`.
+
+---
+
+Finally, to launch the built executable, use either `make run` or `./build/dna-not-ascii`.
+
+
+## Built With
+
+* C/C++ 17
+* [CMake][cmake]
+* [Boost][boost]
+* [zlib][zlib]
+* [Visual Studio Code][vscode]
+
+## Contributing
+
+Contribution are not permitted yet, because this project is
+really simple and should not be a real problem. You noticed a bug
+in the source code? Feel free to post an issue
+about it.
+
+## Author
+
+* **Valentin Berger ([Cynnexis](https://github.com/Cynnexis)):** developer
+
+## License
+
+This project is under the MIT License.
+Please see the [LICENSE.txt](https://github.com/Cynnexis/dna-not-ascii/blob/master/LICENSE.txt)
+file for more detail.
+
+[cmake]: https://cmake.org/install/
+[boost]: https://www.boost.org/
+[zlib]: http://zlib.net/
+[vscode]: https://code.visualstudio.com/

@@ -4,9 +4,11 @@ ifneq (,$(wildcard ./.env))
 	export $(shell sed 's/=.*//' .env)
 endif
 SHELL := /bin/bash
-DEPS = $(wildcard src/*.cpp) $(wildcard src/*.hpp) $(wildcard lib/tqdm.cpp/include/tqdm/*.h) $(wildcard lib/cpp-stopwatch/*.cpp) $(wildcard lib/cpp-stopwatch/*.h)
+SOURCE = $(wildcard src/*.cpp) $(wildcard src/*.hpp)
+LIBS = $(wildcard lib/tqdm.cpp/include/tqdm/*.h) $(wildcard lib/cpp-stopwatch/*.cpp) $(wildcard lib/cpp-stopwatch/*.h)
+DEPS = $(SOURCE) $(LIBS) 
 CMAKE_BUILD_TYPE=Release
-.PHONY: clean compile run debug docs
+.PHONY: clean compile run debug
 .ONESHELL:
 
 all: compile
@@ -50,5 +52,5 @@ debug:
 	$(MAKE) compile CMAKE_BUILD_TYPE=Debug && \
 	gdb build/dna-not-ascii
 
-docs:
+docs: $(SOURCE) doxy.conf
 	doxygen doxy.conf
