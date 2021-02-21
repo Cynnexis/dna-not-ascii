@@ -5,7 +5,7 @@ ifneq (,$(wildcard ./.env))
 endif
 SHELL := /bin/bash
 SOURCE = $(wildcard src/*.cpp) $(wildcard src/*.hpp)
-LIBS = $(wildcard lib/tqdm.cpp/include/tqdm/*.h) $(wildcard lib/cpp-stopwatch/*.cpp) $(wildcard lib/cpp-stopwatch/*.h)
+LIBS = $(wildcard lib/cpp_progress_bar/*.hpp) $(wildcard lib/cpp_progress_bar/*.cpp) $(wildcard lib/cpp-stopwatch/*.cpp) $(wildcard lib/cpp-stopwatch/*.h)
 DEPS = $(SOURCE) $(LIBS) 
 CMAKE_BUILD_TYPE=Release
 .PHONY: clean compile run debug

@@ -72,6 +72,8 @@ Finally, to launch the built executable, use either `make run` or `./build/dna-n
 * [CMake][cmake]
 * [Boost][boost]
 * [zlib][zlib]
+* [kduske/cpp-stopwatch][kduske-cpp-stopwatch]
+* [htailor/cpp_progress_bar][htailor-cpp_progress_bar]
 * [Visual Studio Code][vscode]
 
 ## Contributing
@@ -94,4 +96,6 @@ file for more detail.
 [cmake]: https://cmake.org/install/
 [boost]: https://www.boost.org/
 [zlib]: http://zlib.net/
+[kduske-cpp-stopwatch]: https://github.com/kduske/cpp-stopwatch
+[htailor-cpp_progress_bar]: https://github.com/htailor/cpp_progress_bar
 [vscode]: https://code.visualstudio.com/

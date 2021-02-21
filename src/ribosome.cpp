@@ -120,13 +120,15 @@ AminoAcid::AminoAcidEnum Ribosome::translate_codon(const string& codon) {
 	return translate_codon(codon[0], codon[1], codon[2]);
 }
 
-std::vector<AminoAcid::AminoAcidEnum> Ribosome::translate(const string& sequence) {
+std::vector<AminoAcid::AminoAcidEnum> Ribosome::translate(const string& sequence, int printEveryMs) {
 	std::vector<AminoAcid::AminoAcidEnum> results;
 	results.reserve(lround(sequence.length() / ((double) MAX_NUCLEOTIDES_HANDLING)));
 
 	char buffer[MAX_NUCLEOTIDES_HANDLING] = {0, 0, 0};
 	short currentBufferIndex = 0;
 
+	ProgressBar progressBar((int) (sequence.length() - 1), "Translating codons", cout);
+	time_t lastPrint = 0;
 	for (int i = 0; i < sequence.length(); i++) {
 		// If the buffer is not full...
 		if (currentBufferIndex < MAX_NUCLEOTIDES_HANDLING) {
@@ -141,6 +143,17 @@ std::vector<AminoAcid::AminoAcidEnum> Ribosome::translate(const string& sequence
 			// Reset the buffer
 			currentBufferIndex = 0;
 		}
+
+		// Update progress bar
+		unsigned long current = epochMs();
+		if (printEveryMs > 0 && lastPrint + printEveryMs <= current) {
+			lastPrint = current;
+			progressBar.Progressed((int) i);
+		}
+	}
+	if (printEveryMs > 0) {
+		progressBar.Progressed((int) (sequence.length() - 1));
+		cout << endl;
 	}
 
 	return results;

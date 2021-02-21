@@ -1,3 +1,6 @@
 [submodule "lib/cpp-stopwatch"]
 	path = lib/cpp-stopwatch
 	url = https://github.com/kduske/cpp-stopwatch.git
+[submodule "lib/cpp_progress_bar"]
+	path = lib/cpp_progress_bar
+	url = https://github.com/htailor/cpp_progress_bar.git

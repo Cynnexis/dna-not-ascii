@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cerrno>
 #include <boost/algorithm/string.hpp>
+#include <progress_bar.hpp>
 
 #include "compressed_reader.hpp"
 

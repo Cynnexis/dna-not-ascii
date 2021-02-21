@@ -1,19 +1,5 @@
 #include "dna_allocator.hpp"
 
-/**
- * @brief Get the current epoch in milliseconds.
- * @details Source code inspired from https://stackoverflow.com/a/17371925/7347145
- * by Dan Moulding and Raedwald.
- * 
- * @return unsigned long The time in milliseconds starting from January the 1st,
- * 1970.
- */
-unsigned long epochMs() {
-	struct timespec spec;
-	clock_gettime(CLOCK_REALTIME, &spec);
-	return spec.tv_sec * 1000L + (spec.tv_nsec / 1.0e6);
-}
-
 string read_ensembl_file(const string& filepath, bool include_unknown_nucleotide, int printEveryMs) {
 	// Read the file stat
 	struct stat fileStat;
@@ -26,13 +12,8 @@ string read_ensembl_file(const string& filepath, bool include_unknown_nucleotide
 	time_t lastPrint = 0;
 	string s = "";
 
+	ProgressBar progressBar(fileStat.st_size, "Reading genome from file", cout);
 	for (unsigned int i = 0;; i++) {
-		unsigned long current = epochMs();
-		if (printEveryMs > 0 && lastPrint + printEveryMs <= current) {
-			lastPrint = current;
-			cout << "Collected " << i << " lines.\r" << std::flush;
-		}
-		
 		const string line = CompressedReader::readline(f, 80);
 		if (line.empty())
 			break;
@@ -48,10 +29,24 @@ string read_ensembl_file(const string& filepath, bool include_unknown_nucleotide
 					s += nucleotide;
 			}
 		}
+
+		// Update progress bar
+		unsigned long current = epochMs();
+		if (printEveryMs > 0 && lastPrint + printEveryMs <= current) {
+			lastPrint = current;
+			progressBar.Progressed(numReadChars / sizeof(int));
+		}
+	}
+	// Finish the progress bar
+	if (printEveryMs > 0) {
+		progressBar.Progressed(fileStat.st_size);
+		cout << endl;
 	}
 
-	if (printEveryMs > 0)
+	if (printEveryMs > 0) {
+		cout.precision(2);
 		cout << "\nRead " << numReadChars / sizeof(int) << " bytes out of the " << fileStat.st_size << " bytes file (" << (numReadChars / sizeof(int)) / ((double) fileStat.st_size) * 100.0 << "%)" << endl;
+	}
 
 	return s;
 }

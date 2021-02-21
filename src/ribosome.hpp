@@ -1,5 +1,7 @@
 #pragma once
 #include <cmath>
+#include <limits>
+#include <progress_bar.hpp>
 #include "amino_acid.hpp"
 
 #define MAX_NUCLEOTIDES_HANDLING 3
@@ -71,5 +73,14 @@ namespace Ribosome {
 	 */
 	AminoAcid::AminoAcidEnum translate_codon(const string& codon);
 
-	std::vector<AminoAcid::AminoAcidEnum> translate(const string& sequence);
+	/**
+	 * @brief Translate all given codons in @p sequence into a list of amino acids.
+	 * 
+	 * @param sequence The sequence of DNA to convert into a list of amino acids.
+	 * @param printEveryMs The number of milliseconds between two prints for
+	 * indicating reading progression. Set it to a negative or null value to
+	 * disable outputs. Defaults to -1.
+	 * @return Returns a list of amino acid.
+	 */
+	std::vector<AminoAcid::AminoAcidEnum> translate(const string& sequence, int printEveryMs = -1);
 }
