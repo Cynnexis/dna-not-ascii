@@ -1,6 +1,7 @@
 #include "dna_allocator.hpp"
 #include "ribosome.hpp"
 #include "algo_gen.hpp"
+#include "plot.hpp"
 #include <Stopwatch.h>
 
 using namespace std;
@@ -11,7 +12,7 @@ int main(int argc, char* argv[]) {
 	Stopwatch swatch = Stopwatch();
 	swatch.set_mode(StopwatchMode::REAL_TIME);
 	swatch.start("1");
-	const string content = read_ensembl_file("data/Homo_sapiens.GRCh38.dna.chromosome.1.fa.gz", true,
+	const string content = read_ensembl_file("data/Homo_sapiens.GRCh38.dna.chromosome.MT.fa.gz", true,
 #ifdef DEBUG
 		PRINT_FREQUENCY_MS
 #else
@@ -105,7 +106,7 @@ int main(int argc, char* argv[]) {
 
 		// Print stats
 		for (const auto& [key, value] : occurrences)
-			cout << "\t" << AminoAcid::to_string(key) << ": " << value << endl;
+			cout << "\t" << AminoAcid::to_string(key) << ": " << value << " (" << (((double) value) / aminos.size()) * 100.0 << "%)" << endl;
 	}
 
 	{
@@ -127,7 +128,7 @@ int main(int argc, char* argv[]) {
 			
 			size_t end = -1;
 			try {
-				for (unsigned long j = i + 3; j < content.length(); j++) { // TODO: j += 3 ?
+				for (unsigned long j = i + 3; j < content.length(); j += 3) {
 					string codon = content.substr(j, 3);
 					if (codon == "TAA" || codon == "TAG" || codon == "TGA") {
 						end = j;
@@ -174,6 +175,9 @@ int main(int argc, char* argv[]) {
 		cout.precision(2);
 		cout << "\tNumber of proteins: " << num_proteins << "\n\tAverage protein size: " << ((long double) sum_protein_size) / num_proteins << " nucleotides\n\tMin protein size: " << min_protein_size << " nucleotides\n\tMax protein size: " << max_protein_size << " nucleotides" << endl;
 	}
+
+	// Save sequence as an image to disk
+	plot::dna_to_image(content, "mt.png", -1, PRINT_FREQUENCY_MS);
 
 	return 0;
 }

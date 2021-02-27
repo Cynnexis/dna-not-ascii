@@ -46,7 +46,10 @@ sudo make install
 
 ## Getting Started
 
-To compile the project, use the following command:
+First you need to install [PNGwriter](https://github.com/pngwriter/pngwriter) on your computer by following [this guide](https://github.com/pngwriter/pngwriter#installation).
+You might need to install `libpng-dev`, `zlib1g-dev`, `libbz2-1.0` and `libbz2-dev` beforehand.
+
+Then, to compile the project, use the following command:
 
 ```bash
 make
