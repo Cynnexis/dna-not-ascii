@@ -1,14 +1,6 @@
 #include "plot.hpp"
 
-std::map<char, std::tuple<double, double, double>> colormap{
-	{'A', std::make_tuple<double, double, double>(1., 0., 0.)},
-	{'T', std::make_tuple<double, double, double>(1., 1., 0.)},
-	{'C', std::make_tuple<double, double, double>(0., 1., 0.)},
-	{'G', std::make_tuple<double, double, double>(0., 0., 1.)},
-	{'N', std::make_tuple<double, double, double>(0., 0., 0.)},
-};
-
-void plot::dna_to_image(const string& sequence, string filepath, long width, int printEveryMs) {
+void plot::dna_to_image(const string& sequence, string filepath, long width, const map_nucleotide_dcolor colormap, int printEveryMs) {
 	if (width <= 0)
 		width = (long) ceil(sqrt((long double) sequence.length()));
 
@@ -29,7 +21,7 @@ void plot::dna_to_image(const string& sequence, string filepath, long width, int
 		unsigned int col_px = col * NUCLEOTIDE_PIXEL_WIDTH + 1;
 		unsigned int row_px = ((height - 1) * NUCLEOTIDE_PIXEL_HEIGHT) - row * NUCLEOTIDE_PIXEL_HEIGHT + 1;
 
-		img.filledsquare(col_px, row_px, col_px + NUCLEOTIDE_PIXEL_WIDTH, row_px + NUCLEOTIDE_PIXEL_HEIGHT, std::get<0, double>(colormap[sequence[i]]), std::get<1, double>(colormap[sequence[i]]), std::get<2, double>(colormap[sequence[i]]));
+		img.filledsquare(col_px, row_px, col_px + NUCLEOTIDE_PIXEL_WIDTH, row_px + NUCLEOTIDE_PIXEL_HEIGHT, std::get<0, double>(colormap.at(sequence[i])), std::get<1, double>(colormap.at(sequence[i])), std::get<2, double>(colormap.at(sequence[i])));
 
 		// Update progress bar
 		unsigned long current = epochMs();

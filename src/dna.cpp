@@ -177,7 +177,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Save sequence as an image to disk
-	plot::dna_to_image(content, "mt.png", -1, PRINT_FREQUENCY_MS);
+	cout << "Displaying sequence \"" << content.substr(0, 10) << "\"..." << endl;
+	plot::dna_to_image(content, "mt.png", -1, plot::default_colormap, PRINT_FREQUENCY_MS);
 
 	return 0;
 }

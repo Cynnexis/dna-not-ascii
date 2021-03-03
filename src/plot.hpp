@@ -11,6 +11,19 @@
 #define NUCLEOTIDE_PIXEL_HEIGHT 5
 
 namespace plot {
+	typedef std::tuple<int, int, int> icolor;
+	typedef std::tuple<double, double, double> dcolor;
+	typedef std::map<char, icolor> map_nucleotide_icolor;
+	typedef std::map<char, dcolor> map_nucleotide_dcolor;
+
+	const map_nucleotide_dcolor default_colormap{
+		{'A', std::make_tuple<double, double, double>(1., 0., 0.)},
+		{'T', std::make_tuple<double, double, double>(1., 1., 0.)},
+		{'C', std::make_tuple<double, double, double>(0., 1., 0.)},
+		{'G', std::make_tuple<double, double, double>(0., 0., 1.)},
+		{'N', std::make_tuple<double, double, double>(0., 0., 0.)},
+	};
+
 	/**
 	 * @brief Write the given DNA sequence in a PNG image on the disk.
 	 * 
@@ -24,5 +37,5 @@ namespace plot {
 	 * indicating reading progression. Set it to a negative or null value to
 	 * disable outputs. Defaults to -1.
 	 */
-	void dna_to_image(const string& sequence, string filepath, long width = -1, int printEveryMs = 1);
+	void dna_to_image(const string& sequence, string filepath, long width = -1, const map_nucleotide_dcolor colormap = default_colormap, int printEveryMs = 1);
 }

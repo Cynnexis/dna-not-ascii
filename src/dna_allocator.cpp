@@ -7,36 +7,28 @@ string read_ensembl_file(const string& filepath, bool include_unknown_nucleotide
 		// Throw an exception if an error occurred
 		throw std::runtime_error(std::strerror(errno));
 
-	gzFile f = gzopen(filepath.c_str(), "rb");
-	int numReadChars = 0;
+	int numReadBytes = 0;
 	time_t lastPrint = 0;
-	string s = "";
-
 	ProgressBar progressBar(fileStat.st_size, "Reading genome from file", cout);
-	for (unsigned int i = 0;; i++) {
-		const string line = CompressedReader::readline(f, 80);
-		if (line.empty())
-			break;
-		
-		numReadChars += line.length();
-
-		// Ignore the first line
-		if (i > 0) {
-			// Keep only valid nucleotides
-			string nucleotides = "";
-			for (const char& nucleotide : line) {
-				if (nucleotide == 'A' || nucleotide == 'T' || nucleotide == 'C' || nucleotide == 'G' || include_unknown_nucleotide && nucleotide == 'N')
-					s += nucleotide;
-			}
-		}
+	std::function<void(unsigned int, char*)> functor = [&](unsigned int iteration, char* buffer) -> void {
+		numReadBytes += DEFAULT_GZ_BUFFER_LENGTH;
 
 		// Update progress bar
 		unsigned long current = epochMs();
 		if (printEveryMs > 0 && lastPrint + printEveryMs <= current) {
 			lastPrint = current;
-			progressBar.Progressed(numReadChars / sizeof(int));
+			progressBar.Progressed(numReadBytes);
 		}
-	}
+	};
+	string s = CompressedReader::read(filepath, DEFAULT_GZ_BUFFER_LENGTH, functor);
+
+	// Remove first line
+	size_t pos_end_first_line = s.find('\n');
+	s = s.substr(pos_end_first_line + 1);
+
+	// Remove all '\n'
+	boost::algorithm::erase_all(s, "\n");
+	
 	// Finish the progress bar
 	if (printEveryMs > 0) {
 		progressBar.Progressed(fileStat.st_size);
@@ -45,7 +37,7 @@ string read_ensembl_file(const string& filepath, bool include_unknown_nucleotide
 
 	if (printEveryMs > 0) {
 		cout.precision(2);
-		cout << "\nRead " << numReadChars / sizeof(int) << " bytes out of the " << fileStat.st_size << " bytes file (" << (numReadChars / sizeof(int)) / ((double) fileStat.st_size) * 100.0 << "%)" << endl;
+		cout << "\nRead " << numReadBytes << " bytes out of the " << fileStat.st_size << " bytes file (" << numReadBytes / ((double) fileStat.st_size) * 100.0 << "%)" << endl;
 	}
 
 	return s;
